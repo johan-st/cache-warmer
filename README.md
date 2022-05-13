@@ -1,9 +1,15 @@
-# cache-warmer
-## purpose
-Given a regex for filtering urls and an initial url to start from it will crawl all sites linked to from the initial url.
+# Cache Warmer
+_[GitHub repository](https://github.com/johan-st/cache-warmer)_
+
+A small cli-tool using the [go-colly](https://pkg.go.dev/github.com/gocolly/colly) scraping framework to clear and warm the cache.
+
+The initial repository is private since it contains sensitive information and defaults targeting an employers servers. This is the public, open source repository with general examples as defaults.
+
+## Idea
+The idea is to trigger cache regeneration by sending a get request to all desired urls after clearing the cache. The tool has evolved with the daily use and changing requirements of our live enviorments.
 
 ## Usage
-The tool accepts flags to set conditions and define behaviour. 
+Given a regex for filtering urls and an initial url to start from it will crawl all sites linked to from the initial url.
 
 ### Flags
 ```
@@ -21,16 +27,13 @@ The tool accepts flags to set conditions and define behaviour.
   -w int
         Workers: How many workers to use. (default 1)
 ```
-
+## Build
 ```
 $ go build -o ./build/cache-warmer .
 ```
 
-## todos:
-- list location of erranious links
-- alert on error
-- follow redirects
 
+## future Ideas
+- list erronious urls (maybe save list from previous run and monitor where they are on the page on subsequent run)
+- email alert on error
 
-## ideas
-- list erronious urls from previous run and monitor where they are on the page on subsequent run
