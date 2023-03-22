@@ -55,13 +55,6 @@ func warmCache(o options) result {
 		// colly.CacheDir("./.cache"),
 		// colly.Debugger(&debug.LogDebugger{}),
 	)
-	// c.DisableCookies()
-	// c1 := &http.Cookie{Name: "Bobby", Value: "Draper"}
-	// c.SetCookies("https://www.dpj.se", []*http.Cookie{c1})
-	c.OnRequest(
-		func(r *colly.Request) {
-			r.Headers.Set("Cookie", "PrestaShop-2b300779f285f16fb7e7cb0b5c8d604d=def502008d2c9e60ebc983342589dbb3277d338ae6254a6e0a7889b6711e8491b939b9df83587dd1cba670c9c3b75ef8335403d5ea1a75ea7e5ba0a3bf05451f65d06c1c9cc13402ff5d029457648ef436293dc2583dd681492f5b9ebba9081d9c9ad45a78d32fbff14ddba1551471d524f5e34e737c31f50c367fee344066de754d41a19468384d971b9861ba9ba3ad999ea381262d333f63d6372c1c0a696a85c97bc234dfef1086959607929719bde6a9a432d2f58e2208b9ac9428f9a9b7d5cc20d7f50405208f11eff5231b2c235b819af57025d86b0c2be2a17475d2d36002bde0a785dfbcb17cbbfa9ecdcb0cb960340ce1d9b69242c170c50fe1cf3674b7b3e823f6668055a8017c76dbcaa7d8119d45055a964037fe3f8cf997347d9cded4dfcfdef41a680ea85d3c59640a59c3bd4c8b188abd12e60ca2757c861a85aea44f16d839dea8831ba9e06956f7d5512d853e8399f40e8a71cae314015658cd2d277d7a1b783f1a549e2110548dcb530c9dd76aac5717f77c928605ef53757391b34354604d2c7d63f3989390c9a99eac24acc8ce52ec01fec686a978fbdb9696948285bd657e15ec639eeed9d348fc33ff47b58058584b096bca335d30b6f5f264c09d598110ca8ad9cad3b347109661a01fac369d4f4201958a996c183febfd63329cfbc64a0e39f894a9337dbf0b69e4b3a41135f8ee5a8f3815a31ebe3df348e0420efe1733f494d17342799f81446e012dbd11a9adbdae")
-		})
 
 	c.Limit(&colly.LimitRule{
 		DomainGlob:  "*",
@@ -113,14 +106,13 @@ type options struct {
 	agent      string
 	verbose    bool
 	isTerminal bool
-	cookie     string
 }
 
 func (o options) print() {
 	if o.curl == "" {
 		o.curl = "[no curl]"
 	}
-	fmt.Printf("----- OPTIONS -----\nInitial url: %s\nRegex filter: %s\nMax depth: %d\nWorkers: %d\nCurl: %s\nUser Agent: %s\nCookie: %s\n\n", o.initialUrl, o.urlRegex, o.depth, o.workers, o.curl, o.agent, o.cookie)
+	fmt.Printf("----- OPTIONS -----\nInitial url: %s\nRegex filter: %s\nMax depth: %d\nWorkers: %d\nCurl: %s\nUser Agent: %s\n\n", o.initialUrl, o.urlRegex, o.depth, o.workers, o.curl, o.agent)
 }
 
 func newOptions() options {
@@ -132,7 +124,6 @@ func newOptions() options {
 	flagCurl := flag.String("c", "", "Curl: Make a curl to the given url before starting warmer. Warmer will not start if response status code is not 200.")
 	flagAgent := flag.String("a", "cache-warmer_"+version, "UserAgent: Set custom value for the \"User-Agent\" header.")
 	flagVerbose := flag.Bool("v", false, "Verbose: Print verbose output.")
-	flagCookie := flag.String("cookie", "", "Cookie: Set custom value for the \"Cookie\" header.")
 	flag.Parse()
 
 	return options{
@@ -144,7 +135,6 @@ func newOptions() options {
 		agent:      *flagAgent,
 		verbose:    *flagVerbose,
 		isTerminal: isTerminal(),
-		cookie:     *flagCookie,
 	}
 }
 
